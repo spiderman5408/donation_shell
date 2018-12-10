@@ -13,11 +13,11 @@ fi
 }
 ss_install()
 {
-	mkdir /data/shadowsocks
+	# mkdir /data/shadowsocks
 	cd /data
 	git clone -b manyuser https://github.com/esdeathlove/shadowsocks.git "/data/shadowsocks"
 	cd /data/shadowsocks
-	pip install -r requirements.txt
+	# pip install -r requirements.txt
 	cp apiconfig.py userapiconfig.py
 	cp config.json user-config.json
 	mv server.py server_2.py
