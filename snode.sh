@@ -25,8 +25,6 @@ ss_install()
 }
 db(){
     clear
-	# 取消文件数量限制
-	sed -i '$a * hard nofile 512000\n* soft nofile 512000' /etc/security/limits.conf
 	echo -e "如果以下手动配置错误，请在${config}手动编辑修改"
 	read -p "请输入你的对接数据库IP(例如:127.0.0.1 如果是本机请直接回车): " MYSQL_HOST
 	read -p "请输入你的数据库名称(默认sspanel):" MYSQL_DB
