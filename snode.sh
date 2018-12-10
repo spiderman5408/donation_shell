@@ -4,11 +4,11 @@ config="/data/shadowsocks/userapiconfig.py"
 check_ss()
 {
 if [[ ! -d "/root/shadowsocks" ]];then
-echo "已安装节点1，即将对接节点2"
-sleep 2
-else
 echo "未安装节点1，请先安装节点1"
 exit 0;
+else
+echo "已安装节点1，即将对接节点2"
+sleep 2
 fi
 }
 ss_install()
