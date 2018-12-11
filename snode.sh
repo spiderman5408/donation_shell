@@ -21,7 +21,8 @@ ss_install()
 	cp apiconfig.py userapiconfig.py
 	cp config.json user-config.json
 	mv server.py server_2.py
-	sed -i "s/server.py/server_2.py/g" /data/shadowsocks/run.sh
+    wget https://raw.githubusercontent.com/marisn2017/donation_shell/master/run.sh
+	chmod +x run.sh
 }
 db(){
     clear
