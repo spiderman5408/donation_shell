@@ -1,7 +1,7 @@
 #!/bin/bash
 #sspanel 一键搭建脚本 商业版
 #测试脚本 请勿破解
-#2019-3-21 16:39:22
+#2019-8-11 11:51:42
 PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:~/bin
 export PATH
 ulimit -c 0
@@ -216,7 +216,8 @@ Install_Sspanel_Web_to_Bt()
 	# mv -f tool/autoload_classmap.php vendor/composer/system,
 	sed -i 's/proc_open,//g' /www/server/php/71/etc/php.ini
 	sed -i 's/system,//g' /www/server/php/71/etc/php.ini
-	sed -i 's/proc_get_status,//g' /www/server/php/71/etc/php.ini     
+	sed -i 's/proc_get_status,//g' /www/server/php/71/etc/php.ini
+    sed -i 's/putenv,//g' /www/server/php/71/etc/php.ini	   
 	cd /www/wwwroot/${Input_Web}/config
     sed -i "s/dbname/$Input_Dbuser/g" .config.php
 	sed -i "s/dbuser/$Input_Dbuser/g" .config.php
@@ -227,6 +228,8 @@ Install_Sspanel_Web_to_Bt()
 	sed -i "s/zhandiandizhi/$WEB_URL_SZ/g" .config.php
 	cd /www/wwwroot/${Input_Web}
 	mysql -u${Input_Dbuser} -p${Input_Dbpwd} ${Input_Dbuser} < /www/wwwroot/${Input_Web}/sql/sspanel.sql >/dev/null 2>&1
+	wget https://getcomposer.org/installer -O composer.phar
+	php composer.phar
 	php composer.phar install
 	clear
 	chown -R www:www storage/
@@ -314,7 +317,8 @@ Install_Ssrpanel_Web_to_Bt()
 	php composer.phar install
 	sed -i 's/proc_open,//g' /www/server/php/71/etc/php.ini
 	sed -i 's/system,//g' /www/server/php/71/etc/php.ini
-	sed -i 's/proc_get_status,//g' /www/server/php/71/etc/php.ini     
+	sed -i 's/proc_get_status,//g' /www/server/php/71/etc/php.ini 
+	sed -i 's/putenv,//g' /www/server/php/71/etc/php.ini    
 	cd /www/wwwroot/${Input_Web}
     cp .env.example .env
 	sed -i '/DB_DATABASE/c \DB_DATABASE='${Input_Dbuser}'' .env
@@ -521,6 +525,8 @@ EOF
 	echo -e "\033[1;5;31m即将开始安装网站所需依赖...\033[0m"
 	cd /data/wwwroot/default/ 
 	#安装依赖
+	wget https://getcomposer.org/installer -O composer.phar
+	php composer.phar
 	php composer.phar install
 	php xcat initQQWry            #下载IP解析库
 	php xcat initdownload         #下载ssr程式
@@ -777,7 +783,6 @@ install_node_api()
 	iptables -X  
 	iptables -I INPUT -p tcp -m tcp --dport 22:65535 -j ACCEPT
 	iptables -I INPUT -p udp -m udp --dport 22:65535 -j ACCEPT
-	iptables-save >/etc/sysconfig/iptables
 	iptables-save >/etc/sysconfig/iptables
 	echo 'iptables-restore /etc/sysconfig/iptables' >> /etc/rc.local
 	echo "/usr/bin/supervisord -c /etc/supervisord.conf" >> /etc/rc.local
