@@ -205,11 +205,15 @@ Install_Sspanel_Web_to_Bt()
 	Sspanel_resources="/data/wwwroot/default/sspanel.tar.gz"  
 	if [[ ! -f ${Sspanel_resources} ]];then
         echo "面板程序 下载失败" > /root/error.log
+		exit 0;
     fi
 	tar xzf sspanel.tar.gz && rm -rf sspanel.tar.gz
+	rm -rf composer.lock && rm -rf composer.phar
 	chown -R root:root *
 	chmod -R 755 *
 	chown -R www:www storage
+	wget https://getcomposer.org/installer -O composer.phar
+	php composer.phar
 	php composer.phar install
 	# mv tool/alipay-f2fpay vendor/
 	# mv -f tool/cacert.pem vendor/guzzle/guzzle/src/Guzzle/Http/Resources/
@@ -228,9 +232,6 @@ Install_Sspanel_Web_to_Bt()
 	sed -i "s/zhandiandizhi/$WEB_URL_SZ/g" .config.php
 	cd /www/wwwroot/${Input_Web}
 	mysql -u${Input_Dbuser} -p${Input_Dbpwd} ${Input_Dbuser} < /www/wwwroot/${Input_Web}/sql/sspanel.sql >/dev/null 2>&1
-	wget https://getcomposer.org/installer -O composer.phar
-	php composer.phar
-	php composer.phar install
 	clear
 	chown -R www:www storage/
 	chmod -R 777 storage/                        
@@ -314,7 +315,6 @@ Install_Ssrpanel_Web_to_Bt()
 	chown -R root:root *
 	chmod -R 755 *
 	chown -R www:www storage
-	php composer.phar install
 	sed -i 's/proc_open,//g' /www/server/php/71/etc/php.ini
 	sed -i 's/system,//g' /www/server/php/71/etc/php.ini
 	sed -i 's/proc_get_status,//g' /www/server/php/71/etc/php.ini 
@@ -325,11 +325,13 @@ Install_Ssrpanel_Web_to_Bt()
 	sed -i '/DB_USERNAME/c \DB_USERNAME='${Input_Dbuser}'' .env
 	sed -i '/DB_PASSWORD/c \DB_PASSWORD='${Input_Dbpwd}'' .env
 	mysql -u${Input_Dbuser} -p${Input_Dbpwd} ${Input_Dbuser} < /www/wwwroot/${Input_Web}/sql/db.sql >/dev/null 2>&1
+	wget https://getcomposer.org/installer -O composer.phar
+	php composer.phar
 	php composer.phar install
 	php artisan key:generate
 	clear
 	chown -R www:www storage/
-	chmod -R 755 storage/
+	chmod -R 777 storage/
 	sleep 3
 	#修改伪静态以及默认路径
 	sed -i "s/\/www\/wwwroot\/$Input_Web/\/www\/wwwroot\/$Input_Web\/public/g" /www/server/panel/vhost/nginx/${Input_Web}.conf
@@ -415,6 +417,8 @@ EOF
 	echo -e "\033[1;5;31m即将开始安装网站所需依赖...\033[0m"
 	cd /data/wwwroot/default/ 
 	#安装依赖
+	wget https://getcomposer.org/installer -O composer.phar
+	php composer.phar
 	php composer.phar install
 	php artisan key:generate
 	chown -R www:www storage/
@@ -483,8 +487,10 @@ Install_Sspanel_Web()
 	Sspanel_resources="/data/wwwroot/default/sspanel.tar.gz"  
 	if [[ ! -f ${Sspanel_resources} ]];then
         echo "面板程序 下载失败" > /root/error.log
+		exit 0;
     fi
 	tar xzf sspanel.tar.gz && rm -rf sspanel.tar.gz
+	rm -rf composer.lock && rm -rf composer.phar
 	#修改源码权限
 	chown -R root:root *
 	chmod -R 777 *
