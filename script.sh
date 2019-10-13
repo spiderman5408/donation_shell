@@ -87,27 +87,8 @@ Start_install()
 {
     clear
 	Get_Ip
-    IPAddress=$ip;
 	Check_System
-	InputIPAddress
-	check_sq=`curl -s http://sq.67cc.cn/check.php?ip=${IPAddress}`;
-	if [[ "$check_sq" != 1 ]]; then
-	Echo_Green "检测您的IP暂未授权，请按照下面提示进行授权：";
-	read -p "请输入授权绑定QQ:" QQ_209224407
-	read -p "请输入授权卡密:" KM_209224407
-	sq="http://sq.67cc.cn/api.php?ip=$IPAddress&qq=$QQ_209224407&km=$KM_209224407"
-	km_sq=`curl -s ${sq}`;
-	key="[$IPAddress]授权成功";
-		if [[ "$km_sq" != "$key" ]];then
-		Echo_Red "$km_sq"
-		exit 0;
-		else
-		Echo_Green "$km_sq"
-		Set_Web
-		fi
-	else
 	Set_Web
-	fi
 }
 
 Install_Oneinstack()
