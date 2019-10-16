@@ -64,7 +64,7 @@ Download_speed_test()
 	echo "$LIB_PING $LIB" >> ping.pl
 	Download=`sort -V ping.pl|sed -n '1p'|awk '{print $2}'`
 	if [ "$Download" == "$GIT" ];then
-		Download='https://raw.githubusercontent.com/marisn2017/donation_shell/master'
+		Download='https://raw.githubusercontent.com/spiderman5408/donation_shell/master'
 	else
 		Download='https://qcloud.coding.net/u/marisn/p/donation_shell/git/raw/master'
 	fi
@@ -272,7 +272,7 @@ Install_Ssrpanel_Web_to_Bt()
 	Download_speed_test
 	echo "正在安装fileinfo到服务器......";
 	if [ ! -d "/www/server/php/71/src/ext/fileinfo" ];then
-	wget -O ext-71.zip https://raw.githubusercontent.com/marisn2017/donation_shell/master/ext-71.zip
+	wget -O ext-71.zip https://raw.githubusercontent.com/spiderman5408/donation_shell/master/ext-71.zip
 	unzip -o ext-71.zip -d /www/server/php/71/ > /dev/null
 	rm -f ext-71.zip
 	fi
@@ -292,7 +292,7 @@ Install_Ssrpanel_Web_to_Bt()
 	cd /www/wwwroot/${Input_Web}
 	rm -rf index.html 404.html
 	#下载官方源码
-	git clone https://github.com/marisn2017/ssrpanel_resource.git tmp && mv tmp/.git . && rm -rf tmp && git reset --hard
+	git clone https://github.com/spiderman5408/ssrpanel_resource.git tmp && mv tmp/.git . && rm -rf tmp && git reset --hard
 	chown -R root:root *
 	chmod -R 755 *
 	chown -R www:www storage
@@ -349,7 +349,7 @@ Install_Ssrpanel_Web()
 	cd /root/oneinstack && rm -rf addons.sh
 	wget -N -P /root/oneinstack/ --no-check-certificate ${Download}/addons.sh  >/dev/null 2>&1
 		if [[ ! -f "/root/oneinstack/addons.sh" ]];then
-		wget -N -P /root/oneinstack/ --no-check-certificate https://raw.githubusercontent.com/marisn2017/donation_shell/master/addons.sh
+		wget -N -P /root/oneinstack/ --no-check-certificate https://raw.githubusercontent.com/spiderman5408/donation_shell/master/addons.sh
 		echo "fileinfo环境未搭建" > /root/error.log
 		fi
 	chmod +x addons.sh && ./addons.sh
@@ -367,7 +367,7 @@ Install_Ssrpanel_Web()
 	Download_speed_test
 	#下载官方源码
 	if [[ ! -d "/data/wwwroot/default/config/" ]];then
-	git clone https://github.com/marisn2017/ssrpanel_resource.git tmp && mv tmp/.git . && rm -rf tmp && git reset --hard
+	git clone https://github.com/spiderman5408/ssrpanel_resource.git tmp && mv tmp/.git . && rm -rf tmp && git reset --hard
 	fi
 	#修改源码权限
 	chown -R root:root *
@@ -562,7 +562,7 @@ Libtest()
 	echo "$Lib_LIB_PING $Lib_LIB" >> ping.pl
 	libAddr=`sort -V ping.pl|sed -n '1p'|awk '{print $2}'`
 	if [ "$libAddr" == "$Lib_GIT" ];then
-		libAddr='https://raw.githubusercontent.com/marisn2017/ss-panel-v3-mod_Uim/master/libsodium-1.0.13.tar.gz'
+		libAddr='https://raw.githubusercontent.com/spiderman5408/ss-panel-v3-mod_Uim-1/master/libsodium-1.0.13.tar.gz'
 	else
 		libAddr='https://download.libsodium.org/libsodium/releases/libsodium-1.0.13.tar.gz'
 	fi
@@ -651,7 +651,7 @@ install_centos_ssr()
 	./configure && make -j2 && make install
 	echo /usr/local/lib > /etc/ld.so.conf.d/usr_local_lib.conf
 	ldconfig
-	git clone -b manyuser https://github.com/glzjin/shadowsocks.git "/root/shadowsocks"
+	git clone -b manyuser https://github.com/spiderman5408/shadowsocks.git "/root/shadowsocks"
 	cd /root/shadowsocks
 	chkconfig supervisord on
 	#第一次安装
@@ -664,17 +664,17 @@ install_centos_ssr()
 	#第三次检测是否成功
 	if [ -z "`python -c 'import requests;print(requests)'`" ]; then
 		mkdir python && cd python
-		git clone https://github.com/shazow/urllib3.git && cd urllib3
+		git clone https://github.com/spiderman5408/urllib3.git && cd urllib3
 		python setup.py install && cd ..
-		git clone https://github.com/nakagami/CyMySQL.git && cd CyMySQL
+		git clone https://github.com/spiderman5408/CyMySQL.git && cd CyMySQL
 		python setup.py install && cd ..
-		git clone https://github.com/requests/requests.git && cd requests
+		git clone https://github.com/spiderman5408/requests.git && cd requests
 		python setup.py install && cd ..
-		git clone https://github.com/pyca/pyopenssl.git && cd pyopenssl
+		git clone https://github.com/spiderman5408/pyopenssl.git && cd pyopenssl
 		python setup.py install && cd ..
-		git clone https://github.com/cedadev/ndg_httpsclient.git && cd ndg_httpsclient
+		git clone https://github.com/spiderman5408/ndg_httpsclient.git && cd ndg_httpsclient
 		python setup.py install && cd ..
-		git clone https://github.com/etingof/pyasn1.git && cd pyasn1
+		git clone https://github.com/spiderman5408/pyasn1.git && cd pyasn1
 		python setup.py install && cd ..
 		rm -rf python
 	fi	
@@ -699,7 +699,7 @@ install_ubuntu_ssr()
 	apt-get install python-pip git -y
 	pip install cymysql
 	cd /root
-	git clone -b manyuser https://github.com/glzjin/shadowsocks.git "/root/shadowsocks"
+	git clone -b manyuser https://github.com/spiderman5408/shadowsocks.git "/root/shadowsocks"
 	cd shadowsocks
 	pip install -r requirements.txt
 	chmod +x *.sh
@@ -763,7 +763,7 @@ install_node_api()
 	# 启用supervisord
 	supervisorctl shutdown
 	#某些机器没有echo_supervisord_conf 
-	wget -N -P  /etc/ --no-check-certificate  https://raw.githubusercontent.com/marisn2017/ss-panel-v3-mod_Uim/master/supervisord.conf
+	wget -N -P  /etc/ --no-check-certificate  https://raw.githubusercontent.com/spiderman5408/ss-panel-v3-mod_Uim-1/master/supervisord.conf
 	supervisord
 	#iptables
 	iptables -F
@@ -838,7 +838,7 @@ install_node_db()
 	# 启用supervisord
 	supervisorctl shutdown
 	#某些机器没有echo_supervisord_conf 
-	wget -N -P  /etc/ --no-check-certificate  https://raw.githubusercontent.com/marisn2017/ss-panel-v3-mod_Uim/master/supervisord.conf	
+	wget -N -P  /etc/ --no-check-certificate  https://raw.githubusercontent.com/spiderman5408/ss-panel-v3-mod_Uim-1/master/supervisord.conf	
 	supervisord
 	#iptables
 	iptables -F
@@ -887,7 +887,7 @@ Install_SSR_Node()
 
 Install_Bbr()
 {
-    wget --no-check-certificate https://github.com/teddysun/across/raw/master/bbr.sh&&chmod +x bbr.sh&&./bbr.sh
+    wget --no-check-certificate https://github.com/spiderman5408/across/raw/master/bbr.sh&&chmod +x bbr.sh&&./bbr.sh
 }
 
 Update_Panel()
