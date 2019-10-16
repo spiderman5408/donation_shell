@@ -929,6 +929,59 @@ Set_Web_Parameter_For_Bt()
 	exit 0;
 	esac
 }
+function install_node(){
+	clear
+	echo
+    echo -e "\033[31m Add a node...\033[0m"
+	echo
+	sed -i '$a * hard nofile 512000\n* soft nofile 512000' /etc/security/limits.conf
+	[ $(id -u) != "0" ] && { echo "错误: 您必须以root用户运行此脚本"; exit 1; }
+	echo -e "如果你不知道，你可以直接回车。"
+	echo -e "如果连接失败，请检查数据库远程访问是否打开。"
+	read -p "请输入您的对接数据库IP(回车默认为本地IP地址):" Userip
+	read -p "请输入数据库名称(回车默认为ssrpanel):" Dbname
+	read -p "请输入数据库端口(回车默认为3306):" Dbport
+	read -p "请输入数据库帐户(回车默认为root):" Dbuser
+	read -p "请输入数据库密码(回车默认为root):" Dbpassword
+	read -p "请输入您的节点编号(回车默认为1):  " UserNODE_ID
+	IPAddress=`wget http://members.3322.org/dyndns/getip -O - -q ; echo`;
+	Userip=${Userip:-"${IPAddress}"}
+	Dbname=${Dbname:-"ssrpanel"}
+	Dbport=${Dbport:-"3306"}
+	Dbuser=${Dbuser:-"root"}
+	Dbpassword=${Dbpassword:-"root"}
+	UserNODE_ID=${UserNODE_ID:-"1"}
+	install_ssr
+    # 启用supervisord
+	echo_supervisord_conf > /etc/supervisord.conf
+	sed -i '$a [program:ssr]\ncommand = python /root/shadowsocksr/server.py\nuser = root\nautostart = true\nautorestart = true' /etc/supervisord.conf
+	supervisord
+	#iptables
+	iptables -F
+	iptables -X  
+	iptables -I INPUT -p tcp -m tcp --dport 22:65535 -j ACCEPT
+	iptables -I INPUT -p udp -m udp --dport 22:65535 -j ACCEPT
+	iptables-save >/etc/sysconfig/iptables
+	iptables-save >/etc/sysconfig/iptables
+	echo 'iptables-restore /etc/sysconfig/iptables' >> /etc/rc.local
+	echo "/usr/bin/supervisord -c /etc/supervisord.conf" >> /etc/rc.local
+	chmod +x /etc/rc.d/rc.local
+	touch /root/shadowsocksr/ssserver.log
+	chmod 0777 /root/shadowsocksr/ssserver.log
+	cd /home/wwwroot/default/storage/app/public/
+	ln -S ssserver.log /root/shadowsocksr/ssserver.log
+    chown www:www ssserver.log
+	chmod 777 -R /home/wwwroot/default/storage/logs/
+	clear
+	echo "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
+	echo "#                    成功添加节点请登录到前端站点查看              #"
+	echo "#                     正在重新启动系统使节点生效……                 #"
+	echo "#              Author: marisn          Ssrpanel:ssrpanel           #"
+	echo "#              Blog: http://blog.67cc.cn/                          #"
+	echo "#              Github: https://github.com/marisn2017/ssrpanel      #"
+	echo "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
+	reboot
+}
 
 Set_Web()
 {
@@ -936,8 +989,9 @@ Set_Web()
 	echo -e "Welcome to use the sspanel or ssrpanel with one click. V1.04"
 	echo -e "Update_time: $update_time"
 	echo -e "Please choose the build mode."
-	echo -e "1.sspanel or ssrpanel"
-	echo -e "2.sspanel or ssrpanel for bt.cn"
+	echo -e "1.单独搭建sspanel或者ssrpanel"
+	echo -e "2.在宝塔环境下搭建sspanel或者ssrpanel"
+	echo -e "3.一键对接后端节点"                                       #"
 	#echo -e "2.sspanel node"
 	#echo -e "3.ssrpanel node"
 	#echo -e "4.sspanel for bt.cn"
@@ -949,6 +1003,9 @@ Set_Web()
 	;;
 	"2")
 	  Set_Web_Parameter_For_Bt
+	;;
+	"3")
+	  install_node
 	;;
 	# "3")
 	# Echo_Yellow "暂未支持，更新请加群953539179"
